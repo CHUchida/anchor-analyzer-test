@@ -1,0 +1,9 @@
+# Analisador de Ancoragens
+
+Aplicativo para análise de cargas e momentos em ancoragens.
+
+## Funcionalidades
+- Verificação de forças (Fx, Fy, Fz)
+- Verificação de momentos (Mx, My, Mz)
+- Critério Limit 2
+- Suporte a unidades N e kgf
