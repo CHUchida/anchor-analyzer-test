@@ -19,16 +19,33 @@ jobs:
     
     - name: Install Flet
       run: |
+        python -m pip install --upgrade pip
         pip install flet
-        pip install pillow
+        
+    - name: Create requirements file
+      run: |
+        echo "flet>=0.21.0" > requirements.txt
     
     - name: Build APK
-      run: flet pack anchor_flet_app.py --name AnalisadorAncoragens
+      run: |
+        python -m flet pack anchor_flet_app.py \
+          --name AnalisadorAncoragens \
+          --package-name com.ancoragem.analyzer \
+          --version 1.0.0 \
+          --add-package math
+    
+    - name: List generated files
+      run: |
+        echo "=== Arquivos gerados ==="
+        ls -la
+        echo "=== Procurando APK ==="
+        find . -name "*.apk" -o -name "*.aab"
     
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: AnalisadorAncoragens-APK
         path: |
-          *.apk
-          *.aab
+          **/*.apk
+          **/*.aab
+        if-no-files-found: warn
