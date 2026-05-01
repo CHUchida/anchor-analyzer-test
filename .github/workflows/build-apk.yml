@@ -1,17 +1,31 @@
-name: Build APK
-on: workflow_dispatch
+name: Build APK Android
+
+on:
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - run: pip install flet
-      - run: flet pack anchor_flet_app.py --name Analisador
-      - uses: actions/upload-artifact@v4
-        with:
-          name: APK
-          path: "*.apk"
+    - uses: actions/checkout@v4
+    
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        pip install pyinstaller
+        pip install flet
+    
+    - name: Build APK
+      run: |
+        flet pack anchor_flet_app.py --name AnalisadorAncoragens
+    
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: AnalisadorAncoragens-APK
+        path: "*.apk"
