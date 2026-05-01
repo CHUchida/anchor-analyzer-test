@@ -17,15 +17,31 @@ jobs:
     
     - name: Install dependencies
       run: |
+        pip install --upgrade pip
         pip install pyinstaller
         pip install flet
     
+    - name: Verify installations
+      run: |
+        python --version
+        pip list | grep -E "flet|pyinstaller"
+    
     - name: Build APK
       run: |
+        flet --version
         flet pack anchor_flet_app.py --name AnalisadorAncoragens
+    
+    - name: List generated files
+      run: |
+        echo "=== Current directory ==="
+        ls -la
+        echo "=== Searching for APK ==="
+        find . -name "*.apk" -ls
     
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: AnalisadorAncoragens-APK
-        path: "*.apk"
+        path: |
+          *.apk
+          **/*.apk
