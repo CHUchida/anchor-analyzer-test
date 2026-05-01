@@ -1,0 +1,34 @@
+name: Build APK Android
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: Install Flet
+      run: |
+        pip install flet
+        pip install pillow
+    
+    - name: Build APK
+      run: flet pack anchor_flet_app.py --name AnalisadorAncoragens
+    
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: AnalisadorAncoragens-APK
+        path: |
+          *.apk
+          *.aab
