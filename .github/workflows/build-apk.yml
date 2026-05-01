@@ -18,30 +18,31 @@ jobs:
     - name: Install dependencies
       run: |
         pip install --upgrade pip
-        pip install pyinstaller
         pip install flet
+        pip install pillow
     
-    - name: Verify installations
+    - name: Build APK with verbosity
       run: |
-        python --version
-        pip list | grep -E "flet|pyinstaller"
+        flet pack anchor_flet_app.py \
+          --name AnalisadorAncoragens \
+          --package-name com.ancoragem.analyzer \
+          --version 1.0.0 \
+          --verbose
     
-    - name: Build APK
-      run: |
-        flet --version
-        flet pack anchor_flet_app.py --name AnalisadorAncoragens
-    
-    - name: List generated files
+    - name: List all files
       run: |
         echo "=== Current directory ==="
         ls -la
-        echo "=== Searching for APK ==="
-        find . -name "*.apk" -ls
+        echo "=== Search for any APK ==="
+        find . -type f -name "*.apk" || echo "No APK found"
+        echo "=== Search for build folders ==="
+        find . -type d -name "build" -o -name "dist" -o -name "outputs" | head -20
     
-    - name: Upload APK
+    - name: Upload any file (debug)
       uses: actions/upload-artifact@v4
       with:
-        name: AnalisadorAncoragens-APK
+        name: Debug-Files
         path: |
-          *.apk
-          **/*.apk
+          .
+          **/dist/**
+          **/build/**
